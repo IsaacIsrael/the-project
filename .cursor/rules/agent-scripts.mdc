@@ -24,3 +24,8 @@ When creating scripts that **only the agent** will run (sync, one-offs, helpers)
 - **Project root**: If the script needs the repo root, use something like `ROOT="$(cd "$(dirname "$0")/../.." && pwd)"` when the script lives in `.cursor/scripts/`.
 - **Idempotent / safe**: Prefer scripts that can be run multiple times without surprise side effects.
 - **Naming**: Descriptive and lowercase, e.g. `sync-github-tasks.sh`, `generate-something.sh`.
+
+## Related
+
+- **Agent dependencies** — Scripts may require CLIs (e.g. `gh`, `jq`); document them in README per [agent-dependencies.mdc](agent-dependencies.mdc).
+- **Agent context storage** — If a script writes agent-built context (previews, summaries), put it under `.cursor/context/` per [agent-context.mdc](agent-context.mdc).
