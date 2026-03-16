@@ -1,0 +1,28 @@
+---
+description: Document agent dependencies in README with setup links
+alwaysApply: true
+---
+
+# Agent dependencies in README
+
+When you add an **agent dependency** — any tool or CLI required by the agent or by scripts under `.cursor/` (e.g. GitHub CLI, jq, etc.) — you **must**:
+
+1. **Update the README** (create it if missing).
+2. **Add or edit the section** titled **"Project agent dependencies"**.
+3. **List each tool** with:
+   - **Name** of the tool (e.g. GitHub CLI, jq).
+   - **Why** it’s needed (e.g. “used by `.cursor/scripts/sync-github-tasks.sh`”).
+   - **Link to the official setup/install page** (e.g. https://cli.github.com/manual/installation for GitHub CLI, https://jqlang.github.io/jq/download/ for jq).
+
+Keep the section in one place; add new tools as bullet points or a small table. When removing an agent dependency from the project, remove its entry from this section as well.
+
+Example format:
+
+```markdown
+## Project agent dependencies
+
+Tools required for agent or `.cursor/` scripts (see [agent-scripts](.cursor/rules/agent-scripts.mdc)):
+
+- **[GitHub CLI (gh)](https://cli.github.com/manual/installation)** — used by `sync-github-tasks.sh` to fetch issues.
+- **[jq](https://jqlang.github.io/jq/download/)** — used by `sync-github-tasks.sh` to process JSON.
+```
