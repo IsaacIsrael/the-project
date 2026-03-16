@@ -1,0 +1,46 @@
+---
+description: Task hierarchy and GitHub sync — use local tasks and sync with GitHub
+alwaysApply: true
+---
+
+# Tasks and GitHub sync
+
+## Where task context lives
+
+| What | Where |
+|------|--------|
+| Human-readable task list + hierarchy | `.cursor/context/tasks/TASKS.md` |
+| Full state (issues, hierarchy, milestones) | `.cursor/context/tasks/state.json` |
+| Sync script | `.cursor/scripts/sync-github-tasks.sh` (agent-only, not in package.json) |
+| Sync GitHub → local | `bash .cursor/scripts/sync-github-tasks.sh` |
+
+Use `.cursor/context/tasks/` as the source of truth for “what are we working on” during the session. (If you had an existing `.cursor/tasks/`, run sync once to create `.cursor/context/tasks/` and you can remove the old folder.)
+
+Hierarchy in state:
+
+- `state.json` has `issues` (flat) and `hierarchy.roots` / `hierarchy.byNumber` (parent → children).
+- Epics have `children`; tasks under an epic share `parent_issue_url` in the API (reflected in hierarchy).
+
+## Sync script
+
+- **Location**: `.cursor/scripts/sync-github-tasks.sh` — agent-only, follows the agent-scripts rule (bash, under `.cursor/`, not in package.json).
+- **Run**: `bash .cursor/scripts/sync-github-tasks.sh`.
+- Uses **GitHub CLI (gh)** to fetch issues and **jq** to process JSON. Repo from `package.json` `repository` or env `GITHUB_REPO`. Requires `gh` to be installed and authenticated (e.g. `gh auth login`). See README → **Project agent dependencies** for setup links.
+
+## Agent behavior
+
+1. **Before planning work**: Prefer reading `.cursor/context/tasks/TASKS.md` or `state.json` so suggestions align with the current backlog and parent/child structure.
+2. **When user asks “what’s left” or “current tasks”**: Summarize from `.cursor/context/tasks/TASKS.md` (or state); suggest running `bash .cursor/scripts/sync-github-tasks.sh` if it’s stale.
+3. **When implementing a specific issue**: Reference the issue by number (e.g. #7); get details from `state.json` → `issues` if you need body/labels.
+4. **Do not** edit `state.json` or `TASKS.md` by hand; they are generated. Only the sync script or GitHub (via sync) should update them.
+5. **Linking work to GitHub**: In commits/PRs, mention issue numbers (e.g. `Closes #7` or `#12`) so GitHub links them; the next sync will still reflect GitHub as source of truth.
+
+## Repo and overrides
+
+- Repo is read from **git remote origin** (when run from a clone) or env **`GITHUB_REPO=owner/repo`**.
+
+## Related
+
+- **Agent scripts** — Sync and other agent scripts live under `.cursor/scripts/` ([agent-scripts.mdc](agent-scripts.mdc)).
+- **Agent dependencies** — `gh` and `jq` for sync are documented in README ([agent-dependencies.mdc](agent-dependencies.mdc)).
+- **Agent context storage** — All agent context (including task state) is under `.cursor/context/`; tasks in `.cursor/context/tasks/` ([agent-context.mdc](agent-context.mdc)).

@@ -1,0 +1,17 @@
+[
+  {
+    "id": 8,
+    "description": "Define Node.js and Ruby versions...",
+    "scope": "- [ ] Choose Node\n- [ ] Choose Ruby\n- [ ] Validate",
+    "technical_notes": "Expo docs; asdf for both."
+  },
+  {
+    "id": 9,
+    "objective": "One documented IDE setup for all contributors.",
+    "acceptance_criteria": "- [ ] README lists IDE versions\n- [ ] Flow validated."
+  },
+  {
+    "id": 10,
+    "references": "- [Expo SDK](https://docs.expo.dev/versions/latest/)"
+  }
+]
