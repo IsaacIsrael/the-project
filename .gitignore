@@ -36,8 +36,11 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# generated native folders
+# Native folders
 android/.gradle
 android/app/build
 ios/build
 ios/Pods
+
+# Agent context
+.cursor/context/
