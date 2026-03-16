@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "description": "This story establishes the technical and workflow foundations...",
+    "objective": "By the end of this story, any contributor can clone the repo..."
+  },
+  {
+    "id": 2,
+    "acceptance_criteria": "- [ ] Code follows a single style.\n- [ ] CI runs on every PR."
+  }
+]
