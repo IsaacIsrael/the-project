@@ -1,0 +1,29 @@
+---
+description: Where to store agent-built context (summaries, derived state, session data)
+alwaysApply: true
+---
+
+# Agent context storage
+
+Any **context the agent builds** during a session — including **temporary files** (drafts, body files passed to scripts, scratch files) — must be written under **`.cursor/context/`**. Do not use `/tmp/`, project root, or other locations for agent-written context, even if the file is deleted after use.
+
+## What counts as "context"
+
+- Session or conversation summaries
+- Previews (e.g. PR/change previews, diff summaries, generated snippets to review)
+- Derived state or caches the agent creates
+- Notes, scratch data, or structured output the agent produces for later use
+- **Temporary files** the agent writes (e.g. PR body draft for `--body-file`, then delete)
+- Other agent-built artifacts (drafts, runbooks, checklists)
+- Any file the agent writes that is "context" rather than project source or config
+
+## Rules
+
+1. **Location**: Use `.cursor/context/` for all such files (create the folder if it does not exist). This includes temporary/scratch files — no `/tmp/` or elsewhere.
+2. **Organization**: Use subfolders or clear filenames (e.g. `.cursor/context/session-notes.md`, `.cursor/context/pr-body-draft.md`, `.cursor/context/cache/`) as needed.
+3. **Do not** put agent-built context in `/tmp/`, project root, `src/`, or other code/config locations—keep it under `.cursor/context/`.
+
+## Related
+
+- **Agent scripts** — Scripts under `.cursor/scripts/` that produce context (e.g. previews) should write to `.cursor/context/`; see [agent-scripts.mdc](agent-scripts.mdc).
+- **Agent dependencies** — Tools used when building/writing context are documented in README per [agent-dependencies.mdc](agent-dependencies.mdc).
