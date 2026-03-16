@@ -1,0 +1,26 @@
+---
+description: Agent-only scripts — bash, under .cursor, not in package.json
+alwaysApply: true
+---
+
+# Agent-only scripts
+
+When creating scripts that **only the agent** will run (sync, one-offs, helpers):
+
+## Rules
+
+1. **Language**: Bash. No Node/npm dependency, runs in any shell environment the agent has.
+2. **Location**: Under `.cursor/`, e.g. `.cursor/scripts/<name>.sh`. Keep all agent tooling in `.cursor/`.
+3. **Not in package.json**: Do **not** add these scripts to `package.json` or `npm run`. They are invoked by the agent via the terminal (e.g. `bash .cursor/scripts/foo.sh`).
+
+## When to use
+
+- Automation the agent runs on demand (sync from GitHub, local file ops, codegen helpers).
+- One-off or rarely-run tasks that don’t need to be part of the project’s published scripts.
+
+## Conventions
+
+- **Shebang**: Start with `#!/usr/bin/env bash` (or `#!/bin/bash` if you prefer).
+- **Project root**: If the script needs the repo root, use something like `ROOT="$(cd "$(dirname "$0")/../.." && pwd)"` when the script lives in `.cursor/scripts/`.
+- **Idempotent / safe**: Prefer scripts that can be run multiple times without surprise side effects.
+- **Naming**: Descriptive and lowercase, e.g. `sync-github-tasks.sh`, `generate-something.sh`.
