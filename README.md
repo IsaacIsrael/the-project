@@ -10,7 +10,9 @@ Run from the repo root: `npm run cli` or `bash scripts/cli.sh`. Then choose **do
 
 - **Node.js:** 22.22.1 (LTS Jod). Use the version in the repo: `nvm use` (or `nvm install` if needed) — reads [.nvmrc](.nvmrc). Enforced via `package.json` `engines` and [.npmrc](.npmrc) `engine-strict=true` (npm will fail if Node doesn’t match).
 
-**Test that engine-strict is working:** switch to a different Node (e.g. `nvm use 20`) and run `npm install` — it should fail with `EBADENGINE`. Then `nvm use` (or `nvm use 22.22.1`) and `npm install` should succeed.
+- **Ruby:** 3.1.6 (for CocoaPods / iOS). Use [.ruby-version](.ruby-version). rbenv does **not** auto-install — run `rbenv install -s` once (installs the version from `.ruby-version`). Then `pod` resolves via rbenv shims. (3.1 supported until Mar 2025; 2.7 EOL.)
+
+**Test that engine-strict is working (Node):** switch to a different Node (e.g. `nvm use 20`) and run `npm install` — it should fail with `EBADENGINE`. Then `nvm use` (or `nvm use 22.22.1`) and `npm install` should succeed.
 
 ## Project agent dependencies
 
