@@ -1,5 +1,11 @@
 # the-project
 
+## Required versions
+
+- **Node.js:** 22.22.1 (LTS Jod). Use the version in the repo: `nvm use` (or `nvm install` if needed) — reads [.nvmrc](.nvmrc). Enforced via `package.json` `engines` and [.npmrc](.npmrc) `engine-strict=true` (npm will fail if Node doesn’t match).
+
+**Test that engine-strict is working:** switch to a different Node (e.g. `nvm use 20`) and run `npm install` — it should fail with `EBADENGINE`. Then `nvm use` (or `nvm use 22.22.1`) and `npm install` should succeed.
+
 ## Project agent dependencies
 
 Tools required for the agent or scripts under `.cursor/` (see [agent-scripts](.cursor/rules/agent-scripts.mdc)):
