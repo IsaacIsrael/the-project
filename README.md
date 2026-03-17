@@ -26,6 +26,7 @@ Tools required for the agent or scripts under `.cursor/` (see [agent-scripts](.c
 
 Scripts and skills under `.cursor/` support task/PR workflows:
 
+- **Check environment** — Run CLI doctor (Node, npm, nvm) and optionally install to fix setup. Skill: `.cursor/skills/check-environment/SKILL.md`; uses `npm run cli -- --no-banner doctor` / `install`.
 - **Check task AC and update issue** — Sync tasks → task is derived from PR description or branch (e.g. Closes #7) → you confirm which AC are done → task body is updated; if all AC done, agent can create/update the PR. Skill: `.cursor/skills/check-and-update-task-ac/SKILL.md`; uses `sync-github-tasks.sh`, `update-task-bodies.sh`, `gh pr view`.
 - **Create or update PR** — `.cursor/skills/create-or-update-pr/SKILL.md`
 - **Create/update story and tasks** — `.cursor/skills/create-story-and-tasks/SKILL.md`
