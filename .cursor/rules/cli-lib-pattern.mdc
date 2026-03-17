@@ -1,0 +1,60 @@
+---
+description: Pattern for adding a new CLI tool lib (check/ensure a tool like brew, nvm, node)
+globs: scripts/cli/lib/*.sh
+alwaysApply: false
+---
+
+# CLI tool lib pattern
+
+When adding a **new tool lib** (a script that checks and ensures one tool, e.g. brew, nvm, node, rbenv, ruby), follow this pattern. This does **not** apply to `display.sh` or `spinner.sh` (shared helpers).
+
+## 1. File
+
+- **Location**: `scripts/cli/lib/<tool>.sh`
+- **Header comment**: One line describing private helpers (`_` prefix) and public API, e.g.  
+  `# <tool>.sh — Reusable helpers (_prefix). Public: check_<tool>, <tool>_ensure.`  
+  (or `ensure_<tool>` if that’s the project convention for that tool, e.g. `ensure_brew`)
+
+## 2. Structure inside the lib
+
+- **Private helpers**: All logic in functions named with `_` prefix (e.g. `_tool_version_or_empty`, `_tool_check`, `_tool_ensure`). No direct globals except those set for display.
+- **Public API**: Exactly two entrypoints used by `main.sh`:
+  - **Doctor**: `check_<tool>` (or `check_<tool>` / `<tool>_check` as used elsewhere) — runs the check and sets display globals.
+  - **Install**: `<tool>_ensure` or `ensure_<tool>` — ensures the tool is installed/configured and prints ensure lines.
+
+## 3. Display (from `display.sh`)
+
+- **Doctor**: Use `_check_display <emoji_var> <msg_var> <status> [message_or_key] [optional_arg]`.  
+  Status: `ok` | `fail` | `warn` | `skip`.  
+  Set globals: `<tool>_emoji`, `<tool>_msg`. If the check can show a “fix it” hint, set `<tool>_footer=1` when result is not ok so the doctor footer is shown.
+- **Install**: Use `_ensure_display ok "..."` or `_ensure_display fail "..."` etc. for each line you print. Do **not** use raw `echo "  ✅  ..."`.
+- **Fatal errors**: For unrecoverable failures (missing dependency, install failed, can’t proceed), use `_fatal_display "message"`. It stops the spinner, prints the fail line, and exits 1. Do **not** use `_ensure_display fail ...; return 1` for those.
+
+## 4. Message style
+
+- Prefer **“Make sure X is installed”** (or “...is set up”) over **“Run &lt;function&gt; first”**. Messages are for developers; avoid referencing internal function names.
+
+## 5. Wiring in `main.sh`
+
+- **Source**: Add `source "${SCRIPT_DIR}/lib/<tool>.sh"` in both `run_doctor` and `run_install`, after `display.sh` and in the same order as other tool libs (e.g. brew → nvm → node → rbenv → ruby).
+- **Doctor**: Call `check_<tool>` (or `<tool>_check`) in the doctor flow with the other checks.
+- **Install**: Call `<tool>_ensure` or `ensure_<tool>` in the install flow with the other ensures; use `... || return $?` if you want install to stop on non-fatal return.
+
+## 6. Doctor table in `display.sh`
+
+- In `display_results()`, add one or more lines for the new tool, e.g.:  
+  `echo "  ${<tool>_emoji:-—}  <Label> · <sublabel>   ${<tool>_msg:-—}"`
+- If the tool has multiple rows (e.g. “installed” + “configured”), set extra globals (e.g. `<tool>_configured_emoji`, `<tool>_configured_msg`) and add matching lines. Use `${var:-—}` or `${var:-n/a}` for optional/empty state.
+- If the tool contributes to the footer hint, add `<tool>_footer` to the condition that prints the “Make sure the environment is set up...” line.
+
+## 7. Optional: summary line
+
+- Only **node.sh** sets `summary_emoji` and `summary_msg` (passed/failed). Do **not** add a second summary for a new tool; keep a single summary row.
+
+## Checklist when adding a new tool lib
+
+- [ ] `scripts/cli/lib/<tool>.sh` with `_` helpers and public `check_<tool>` + `<tool>_ensure` (or `ensure_<tool>`).
+- [ ] Uses `_check_display` for doctor and `_ensure_display` / `_fatal_display` for install; no raw emoji `echo` for status lines.
+- [ ] Fatal path uses `_fatal_display`; messages say “Make sure X is installed” where appropriate.
+- [ ] `main.sh`: source the lib in doctor and install; call check in doctor and ensure in install.
+- [ ] `display.sh`: new line(s) in `display_results()` for the tool’s emoji/msg (and footer if needed).
