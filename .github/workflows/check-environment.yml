@@ -1,0 +1,20 @@
+name: 🔍 Check environment
+
+on:
+  workflow_call:
+
+jobs:
+  env:
+    name: 🔍 Environment check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Environment setup
+        uses: ./.github/actions/setup
+        with:
+          setup_ruby: true
+
+      - name: ✅ Check environment
+        run: npm run cli -- ci --no-banner

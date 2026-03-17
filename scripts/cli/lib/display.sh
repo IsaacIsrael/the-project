@@ -108,7 +108,7 @@ display_results() {
     printf "  %s  %-24s  %s\n" "$e" "$label" "$m"
   done
   echo ""
-  echo "  ${summary_emoji:-—}  Setup and version check ${summary_msg:-—}"
+  echo "  ${summary_emoji:-—}  Setup and environment check ${summary_msg:-—}"
   if [[ -z "$compact" ]]; then
     local show_footer=0 v
     for v in "${DISPLAY_FOOTER_VARS[@]}"; do

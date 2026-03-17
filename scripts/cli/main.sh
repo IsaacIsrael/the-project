@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# CLI: doctor (version check) and install. Entry point. Run from repo root.
+# CLI: doctor and install. Entry point. Run from repo root.
 # Usage: cli [command]
-#   (no args)   show options: doctor | install
-#   doctor      run setup/version check (Node, npm, nvm, Ruby, rbenv)
-#   install     set up environment (nvm, Node, npm, rbenv Ruby from .ruby-version)
-#   help, -h    show help
+#   doctor      environment check (Node, npm, nvm, Ruby, rbenv, …)
+#   install     set up environment
+#   ci          Node, rbenv, Ruby check (for CI)
 #   --no-banner skip banner (for agents/CI)
 
 set -e
@@ -25,6 +24,7 @@ else
     -h|--help|help)   CMD=help ;;
     doctor|check|setup) CMD=doctor ;;
     install)         CMD=install ;;
+    ci)              CMD=ci ;;
     *)               CMD=help ;;
   esac
 fi
@@ -45,7 +45,7 @@ show_menu() {
   show_banner
   echo "  Options:"
   echo ""
-  echo "    1) doctor   run setup/version check (Node, npm, nvm, Ruby, rbenv)"
+  echo "    1) doctor   run environment check (Node, npm, nvm, Ruby, rbenv, …)"
   echo "    2) install  set up environment (nvm, Node, npm, Ruby from .ruby-version)"
   echo ""
   printf "  Choose [1/2]: "
@@ -67,8 +67,9 @@ show_help() {
   echo "  Usage: cli [command]"
   echo ""
   echo "  Commands:"
-  echo "    doctor   run setup/version check (Node, npm, nvm, Ruby, rbenv)"
+  echo "    doctor   run environment check (Node, npm, nvm, Ruby, rbenv, …)"
   echo "    install  set up environment (nvm, Node, npm, Ruby from .ruby-version)"
+  echo "    ci       Node, rbenv, Ruby check (for CI)"
   echo "    help     show this help"
   echo ""
   echo "  Options:"
@@ -110,6 +111,18 @@ run_doctor() {
   exit 0
 }
 
+# CI: Node, rbenv, Ruby checks; display_results(ci); exit 1 if any row is ❌.
+run_ci() {
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+  source "${SCRIPT_DIR}/lib/display.sh"
+  source "${SCRIPT_DIR}/lib/node.sh"
+  source "${SCRIPT_DIR}/lib/ruby.sh"
+
+  node_check
+  check_ruby
+  set_summary_from_results
+  display_results ci
+  [[ "$summary_msg" == "failed." ]] && exit 1
   exit 0
 }
 
@@ -151,5 +164,6 @@ case "$CMD" in
   help)   show_help ;;
   doctor) run_doctor ;;
   install) run_install ;;
+  ci)     run_ci ;;
   *)      show_help; exit 1 ;;
 esac
