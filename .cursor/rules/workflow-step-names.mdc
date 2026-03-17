@@ -1,0 +1,80 @@
+---
+description: How to create workflows and actions; workflow, job, and step names use emoji (job/workflow max 4 words)
+alwaysApply: false
+globs:
+  - ".github/workflows/**/*.yml"
+  - ".github/actions/**/action.yml"
+---
+
+# How to create workflows and actions
+
+When you **create or edit** GitHub Actions workflows (`.github/workflows/*.yml`) or composite actions (`.github/actions/*/action.yml`), follow this guide.
+
+## Workflow vs composite action
+
+- **Workflow** (`.github/workflows/*.yml`): triggered by events (`push`, `pull_request`, `workflow_call`, etc.). Has `jobs` and runs on GitHub runners. Use for CI (test, build, deploy).
+- **Composite action** (`.github/actions/<name>/action.yml`): reusable steps. No `on:`; has `runs: using: composite` and `steps`. Use for shared setup (e.g. Node + cache) so workflows stay DRY.
+
+## Workflow and job names (emoji + max 4 words)
+
+**Workflow** `name:` (top level), **job** `name:` (`jobs.<id>.name`), and **composite action** `name:` must:
+
+- **Start with one emoji**
+- Be **descriptive** and **short**: **no more than 4 words** (emoji + up to 4 words).
+
+Examples: `🧪 Test versions`, `🟢 Node & engines`, `🛠️ Project Setup`. Avoid `test-versions` (no emoji) or long phrases.
+
+## Workflow structure
+
+- `name:` and job `name:` — see above (emoji + max 4 words).
+- `on:` — which events trigger it (`push`, `pull_request`, `workflow_call`, etc.).
+- Every **step** must have a **custom name with emoji** (below).
+
+## Composite action structure
+
+- `name:` and `description:` at top level (name: emoji + max 4 words).
+- `runs: using: composite` and `runs.steps` (no `on:`).
+- Every step must have a **custom name with emoji** (below).
+
+## Step names (required)
+
+Every step in a workflow or composite action must have a **descriptive custom name** that **starts with one emoji**.
+
+- **Do not** use generic names (`Run npm ci`, `Setup Node`) or leave steps unnamed.
+- **Do** prefix the name with one emoji and a short description.
+
+### Emoji by purpose
+
+| Purpose           | Emoji examples      |
+| ----------------- | ------------------- |
+| Checkout / repo   | 📥 🔽               |
+| Setup / install   | ⚙️ 🛠️ 📦          |
+| Test / verify     | ✅ 🧪 ✔️            |
+| Build             | 🏗️ 📦              |
+| Lint / format     | 📐 ✨               |
+| Deploy / release  | 🚀 📤               |
+| Cache             | 💾 📦               |
+| Node / runtime    | 🟢 (Node)           |
+
+### Examples
+
+**Good:**
+
+```yaml
+- name: 📥 Checkout repository
+  uses: actions/checkout@v4
+
+- name: 🟢 Setup Node from package.json
+  uses: ./.github/actions/setup
+
+- name: ✅ Verify Node version
+  run: node -v
+```
+
+**Avoid:**
+
+```yaml
+- name: Setup Node from package.json engines   # no emoji
+- uses: actions/checkout@v4                     # no name
+- name: Run npm ci                              # generic, no emoji
+```
