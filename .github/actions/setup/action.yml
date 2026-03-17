@@ -1,0 +1,11 @@
+name: 🛠️ Project Setup
+description: Centralized setup, cache, install
+
+runs:
+  using: composite
+  steps:
+    - name: 🟢 Setup Node from package.json
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: 'package.json'
+        cache: 'npm'
