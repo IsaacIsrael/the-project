@@ -1,0 +1,28 @@
+---
+description: Document engine and runtime versions in README when adding or changing them
+alwaysApply: true
+---
+
+# Engine and runtime versions in README
+
+When you **add or change** any **engine or runtime version** that the project depends on, you **must** reflect it in the **README**.
+
+## What counts as an engine/version
+
+- **Node.js** — version in `.nvmrc`, `package.json` `engines.node`
+- **Ruby** — version in `.ruby-version` or equivalent (e.g. for CocoaPods)
+- **Expo / React Native** — SDK or framework version (e.g. from `package.json` or app config)
+- Any other **pinned runtime or tool version** that contributors must use (e.g. npm, Xcode, Android Studio if we pin them)
+
+## Where to document
+
+- **README** — section **"Required versions"** (create it if missing).
+- List each engine with the **exact version** (or exact range) and how it’s enforced (e.g. `.nvmrc`, `engines`, `.npmrc` `engine-strict`).
+- If you add or change a version file (e.g. `.nvmrc`, `.ruby-version`, `package.json` `engines`) or a config that pins a version, update the README in the same change.
+
+## Rule
+
+- **Adding** a new version requirement → add an entry to README **Required versions**.
+- **Changing** an existing version (Node, Ruby, Expo, etc.) → update the corresponding line(s) in README **Required versions** so the doc stays the single source of truth.
+
+Keep **Required versions** and the actual version files (`.nvmrc`, `engines`, `.ruby-version`, etc.) in sync.
