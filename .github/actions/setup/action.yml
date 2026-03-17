@@ -1,11 +1,29 @@
-name: 🛠️ Project Setup
-description: Centralized setup, cache, install
+name: 🛠️ Environment setup
+description: Setup Node, Ruby, cache for environment check
+
+inputs:
+  setup_node:
+    description: "Setup Node from package.json"
+    required: false
+    default: "true"
+  setup_ruby:
+    description: "Setup Ruby from .ruby-version"
+    required: false
+    default: "false"
 
 runs:
   using: composite
   steps:
     - name: 🟢 Setup Node from package.json
+      if: inputs.setup_node == 'true'
       uses: actions/setup-node@v4
       with:
-        node-version-file: 'package.json'
-        cache: 'npm'
+        node-version-file: "package.json"
+        cache: "npm"
+
+    - name: 🔴 Setup Ruby from .ruby-version
+      if: inputs.setup_ruby == 'true'
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version-file: ".ruby-version"
+        bundler-cache: true
