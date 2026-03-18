@@ -10,6 +10,10 @@ inputs:
     description: "Setup Ruby from .ruby-version"
     required: false
     default: "false"
+  setup_cocoapods:
+    description: "Install CocoaPods (gem). Requires Ruby; enable setup_ruby or have Ruby in image."
+    required: false
+    default: "false"
 
 runs:
   using: composite
@@ -27,3 +31,8 @@ runs:
       with:
         ruby-version-file: ".ruby-version"
         bundler-cache: true
+
+    - name: 📦 Install CocoaPods
+      if: inputs.setup_cocoapods == 'true'
+      run: gem install cocoapods
+      shell: bash
