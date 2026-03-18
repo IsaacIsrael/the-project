@@ -1,7 +1,7 @@
 name: 🔍 Check environment
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   env:

@@ -149,20 +149,18 @@ if [[ -n "$issue" ]]; then
   fi
 fi
 
-# Push current branch to origin and set upstream so the PR has the latest commits (and branch exists on remote when creating)
-branch="$(git rev-parse --abbrev-ref HEAD)"
-if [[ "$branch" != "HEAD" ]] && git remote get-url origin &>/dev/null; then
-  if ! git push -u origin HEAD; then
-    echo "Push failed. If your branch history was rewritten, run: git push -u origin $branch --force-with-lease" >&2
-    exit 1
-  fi
-fi
-
-# Create or update: if a PR already exists for the current branch, update it; otherwise create
+# Create or update: if a PR already exists for the current branch, update it; otherwise create.
 existing_pr=""
 existing_pr=$(gh pr view --json number -q '.number' 2>/dev/null) || true
 
 if [[ -n "$existing_pr" ]]; then
+  # gh pr edit does not push; push so the PR has the latest commits.
+  if [[ "$(git rev-parse --abbrev-ref HEAD)" != "HEAD" ]] && git remote get-url origin &>/dev/null; then
+    if ! git push; then
+      echo "Push failed. Run: git push -u origin $(git rev-parse --abbrev-ref HEAD)" >&2
+      exit 1
+    fi
+  fi
   gh pr edit "$existing_pr" --title "$full_title" --body-file "$body_to_use"
   [[ -n "$milestone" ]] && gh pr edit "$existing_pr" --milestone "$milestone"
   echo "PR #${existing_pr} updated: $full_title"
@@ -172,4 +170,4 @@ else
   gh pr create "${gh_args[@]}"
   echo "PR created: $full_title"
 fi
-gh pr view --web
+gh pr view --web 2>/dev/null || true
