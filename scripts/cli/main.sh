@@ -90,20 +90,18 @@ run_doctor() {
   source "${SCRIPT_DIR}/lib/node.sh"
   source "${SCRIPT_DIR}/lib/rbenv.sh"
   source "${SCRIPT_DIR}/lib/ruby.sh"
+  source "${SCRIPT_DIR}/lib/cocoapods.sh"
 
-  SPINNER_MSG="Checking versions…" start_spinner &
-  spinner_pid=$!
-  disown $spinner_pid 2>/dev/null || true
-  trap 'stop_spinner' EXIT
+  start_spinner "Checking versions…"
 
   check_brew
   nvm_check
   node_check
   rbenv_check
   check_ruby
+  cocoapods_check
 
   stop_spinner
-  trap - EXIT
   set_summary_from_results
   display_results
 
@@ -135,25 +133,19 @@ run_install() {
   source "${SCRIPT_DIR}/lib/node.sh"
   source "${SCRIPT_DIR}/lib/rbenv.sh"
   source "${SCRIPT_DIR}/lib/ruby.sh"
+  source "${SCRIPT_DIR}/lib/cocoapods.sh"
   source "${SCRIPT_DIR}/lib/brew.sh"
 
-  ensure_brew || return $?
-  echo ""
-  nvm_ensure || return $?
-  echo ""
-  node_ensure || return $?
-  echo ""
-  rbenv_ensure || return $?
-  echo ""
-  ensure_ruby || return $?
-  echo ""
+  start_spinner "Setting up environment…"
 
-  SPINNER_MSG="Installing dependencies…" start_spinner &
-  spinner_pid=$!
-  disown $spinner_pid 2>/dev/null || true
-  trap 'stop_spinner' EXIT
+  ensure_brew || { stop_spinner; return $?; }
+  nvm_ensure || { stop_spinner; return $?; }
+  node_ensure || { stop_spinner; return $?; }
+  rbenv_ensure || { stop_spinner; return $?; }
+  ensure_ruby || { stop_spinner; return $?; }
+  cocoapods_ensure || { stop_spinner; return $?; }
+
   stop_spinner
-  trap - EXIT
   echo ""
   echo "  ✅  Setup done."
   echo ""
