@@ -47,6 +47,19 @@ _ensure_display() {
     skip) e="⏭️"; m="$msg" ;;
     *)    e="⏭️"; m="$msg" ;;
   esac
+  # Install + coord spinner: print on fixed row below spinner; redraw spinner on saved row.
+  if [[ -n "${SPINNER_COORD_MODE:-}" ]] && type pause_spinner &>/dev/null && type resume_spinner &>/dev/null; then
+    pause_spinner
+    if [[ -w /dev/tty ]]; then
+      printf '\033[%d;1H' "${SPINNER_NEXT_ROW}" > /dev/tty
+      printf '  %s  %s\n' "$e" "$m" > /dev/tty
+    else
+      echo "  $e  $m"
+    fi
+    SPINNER_NEXT_ROW=$((SPINNER_NEXT_ROW + 1))
+    [[ -n "${_ENSURE_NO_RESUME:-}" ]] || resume_spinner
+    return 0
+  fi
   echo "  $e  $m"
 }
 
@@ -55,7 +68,9 @@ _ensure_display() {
 _fatal_display() {
   type stop_spinner &>/dev/null && stop_spinner
   echo ""
+  _ENSURE_NO_RESUME=1
   _ensure_display fail "${1:-Failed.}"
+  unset _ENSURE_NO_RESUME
   echo ""
   exit 1
 }
@@ -73,10 +88,11 @@ DISPLAY_RESULT_ROWS=(
   "rbenv · installed|rbenv_emoji|rbenv_msg|—"
   "rbenv · configured|rbenv_configured_emoji|rbenv_configured_msg|—"
   "Ruby · version|ruby_emoji|ruby_msg|—"
+  "CocoaPods · installed|cocoapods_emoji|cocoapods_msg|—"
 )
 
 # Footer is shown when any of these globals is 1.
-DISPLAY_FOOTER_VARS=( brew_footer node_footer nvm_footer rbenv_footer ruby_footer )
+DISPLAY_FOOTER_VARS=( brew_footer node_footer nvm_footer rbenv_footer ruby_footer cocoapods_footer )
 
 # Set summary_emoji and summary_msg from DISPLAY_RESULT_ROWS: if any row here has ❌, summary = failed; else passed.
 # Call before display_results so the summary line reflects all checks (doctor) or only run checks (ci).
