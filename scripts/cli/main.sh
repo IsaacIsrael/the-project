@@ -3,7 +3,7 @@
 # Usage: cli [command]
 #   doctor      environment check (Node, npm, nvm, Ruby, rbenv, …)
 #   install     set up environment
-#   ci          Node, rbenv, Ruby check (for CI)
+#   ci          Node, Ruby, CocoaPods / Gemfile check (for CI)
 #   --no-banner skip banner (for agents/CI)
 
 set -e
@@ -69,7 +69,7 @@ show_help() {
   echo "  Commands:"
   echo "    doctor   run environment check (Node, npm, nvm, Ruby, rbenv, …)"
   echo "    install  set up environment (nvm, Node, npm, Ruby from .ruby-version)"
-  echo "    ci       Node, rbenv, Ruby check (for CI)"
+  echo "    ci       Node, Ruby, CocoaPods / Gemfile check (for CI)"
   echo "    help     show this help"
   echo ""
   echo "  Options:"
@@ -109,15 +109,17 @@ run_doctor() {
   exit 0
 }
 
-# CI: Node, rbenv, Ruby checks; display_results(ci); exit 1 if any row is ❌.
+# CI: Node, Ruby, CocoaPods / Gemfile; display_results(ci); exit 1 if any row is ❌.
 run_ci() {
   SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   source "${SCRIPT_DIR}/lib/display.sh"
   source "${SCRIPT_DIR}/lib/node.sh"
   source "${SCRIPT_DIR}/lib/ruby.sh"
+  source "${SCRIPT_DIR}/lib/cocoapods.sh"
 
   node_check
   check_ruby
+  cocoapods_check
   set_summary_from_results
   display_results ci
   [[ "$summary_msg" == "failed." ]] && exit 1

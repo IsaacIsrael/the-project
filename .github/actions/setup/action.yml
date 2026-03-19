@@ -1,5 +1,5 @@
 name: 🛠️ Environment setup
-description: Setup Node, Ruby, cache for environment check
+description: Setup Node, Ruby + Bundler (CocoaPods via Gemfile), npm cache
 
 inputs:
   setup_node:
@@ -7,11 +7,7 @@ inputs:
     required: false
     default: "true"
   setup_ruby:
-    description: "Setup Ruby from .ruby-version"
-    required: false
-    default: "false"
-  setup_cocoapods:
-    description: "Install CocoaPods (gem). Requires Ruby; enable setup_ruby or have Ruby in image."
+    description: "Setup Ruby from .ruby-version; bundle install when Gemfile exists (cached)"
     required: false
     default: "false"
 
@@ -25,14 +21,9 @@ runs:
         node-version-file: "package.json"
         cache: "npm"
 
-    - name: 🔴 Setup Ruby from .ruby-version
+    - name: 🔴 Setup Ruby + Bundler
       if: inputs.setup_ruby == 'true'
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version-file: ".ruby-version"
+        ruby-version: ".ruby-version"
         bundler-cache: true
-
-    - name: 📦 Install CocoaPods
-      if: inputs.setup_cocoapods == 'true'
-      run: gem install cocoapods
-      shell: bash
