@@ -4,7 +4,7 @@ Expo/React Native app. Use the **CLI** for setup and version checks — **doctor
 
 ## CLI
 
-Run from the repo root: `npm run cli` or `bash scripts/cli.sh`. Then choose **doctor** or **install**, or pass the command: `npm run cli -- doctor` / `npm run cli -- install`.
+Run from the repo root: `npm run cli` or `bash scripts/cli.sh`. **`ci`:** `npm run cli -- ci --no-banner` (Node, Ruby, CocoaPods + Gemfile pin vs `ios/Podfile.lock`). GitHub Action [check-environment](.github/workflows/check-environment.yml) runs **`ci`** on **Ubuntu** and **macOS** (manual dispatch).
 
 ## Required versions
 
