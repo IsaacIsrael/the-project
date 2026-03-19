@@ -89,6 +89,7 @@ DISPLAY_RESULT_ROWS=(
   "rbenv · configured|rbenv_configured_emoji|rbenv_configured_msg|—"
   "Ruby · version|ruby_emoji|ruby_msg|—"
   "CocoaPods · installed|cocoapods_emoji|cocoapods_msg|—"
+  "CocoaPods · Gemfile pin|cocoapods_gemfile_emoji|cocoapods_gemfile_msg|—"
 )
 
 # Footer is shown when any of these globals is 1.

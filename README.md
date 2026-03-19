@@ -12,7 +12,7 @@ Run from the repo root: `npm run cli` or `bash scripts/cli.sh`. Then choose **do
 
 - **Ruby:** 3.1.6 (for CocoaPods / iOS). Use [.ruby-version](.ruby-version). rbenv does **not** auto-install — run `rbenv install -s` once (installs the version from `.ruby-version`). Then `pod` resolves via rbenv shims. (3.1 supported until Mar 2025; 2.7 EOL.)
 
-- **CocoaPods:** **1.16.2** (for iOS / Expo). Pinned in [ios/Podfile.lock](ios/Podfile.lock) (`COCOAPODS: 1.16.2`). Requires Ruby. **doctor** checks `pod --version` against that line; **install** runs `gem install cocoapods -v 1.16.2` if needed. Without that line in Podfile.lock, doctor/install exit with an error (run `pod install` in `ios/` first).
+- **CocoaPods:** **1.16.2** — [Gemfile](Gemfile) `gem "cocoapods"` must match **`COCOAPODS:`** in [ios/Podfile.lock](ios/Podfile.lock). **doctor** / **ci** fail if they differ, then verify **`bundle exec pod`** vs **Gemfile.lock**. **install** runs **`bundle install`**. **`npm run pod -- install`**: [scripts/pod.sh](scripts/pod.sh).
 
 **Test that engine-strict is working (Node):** switch to a different Node (e.g. `nvm use 20`) and run `npm install` — it should fail with `EBADENGINE`. Then `nvm use` (or `nvm use 22.22.1`) and `npm install` should succeed.
 

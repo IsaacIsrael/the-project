@@ -11,6 +11,7 @@ When you **add or change** any **engine or runtime version** that the project de
 
 - **Node.js** — version in `.nvmrc`, `package.json` `engines.node`
 - **Ruby** — version in `.ruby-version` or equivalent (e.g. for CocoaPods)
+- **CocoaPods** — version in [Gemfile](Gemfile) (`gem "cocoapods"`); should match `ios/Podfile.lock` (`COCOAPODS:`). Update README **Required versions** when you bump it.
 - **Expo / React Native** — SDK or framework version (e.g. from `package.json` or app config)
 - Any other **pinned runtime or tool version** that contributors must use (e.g. npm, Xcode, Android Studio if we pin them)
 
