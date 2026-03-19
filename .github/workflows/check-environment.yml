@@ -4,9 +4,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  env:
-    name: 🔍 Environment check
+  ubuntu:
+    name: 🔍 Ubuntu env check 🐧
     runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Environment setup
+        uses: ./.github/actions/setup
+        with:
+          setup_ruby: true
+
+      - name: ✅ Check environment
+        run: npm run cli -- ci --no-banner
+
+  macos:
+    name: 🔍 macOS env check 🍎
+    runs-on: macos-latest
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
