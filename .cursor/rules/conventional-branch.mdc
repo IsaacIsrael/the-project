@@ -1,0 +1,47 @@
+---
+description: Branch names follow Conventional Branch — type prefix, lowercase, hyphens; optional issue number in the slug.
+alwaysApply: false
+---
+
+# Conventional Branch naming
+
+This project follows **[Conventional Branch](https://conventional-branch.github.io/)** for branch names so purpose and automation stay clear.
+
+## Shape
+
+```
+<type>/<description>
+```
+
+## Allowed `<type>` prefixes (common)
+
+| Prefix     | Use                                  |
+| ---------- | ------------------------------------ |
+| `feature/` | New work (tasks, features)           |
+| `fix/`     | Bug fixes                            |
+| `hotfix/`  | Urgent production fixes              |
+| `release/` | Release prep (e.g. `release/v1.2.0`) |
+
+## Rules
+
+1. **Lowercase** letters (`a-z`), **numbers** (`0-9`), **hyphens** (`-`) only in the description. **Dots** (`.`) are allowed in release-style names (e.g. `release/v1.2.0`).
+2. **No** consecutive, leading, or trailing hyphens or dots (e.g. not `feature/foo--bar`, not `feature/-x`).
+3. **No** spaces, underscores, or arbitrary special characters in the description.
+4. **Include the issue number** when the branch implements a GitHub task/issue (e.g. `feature/9-ide-versions`, `feature/issue-9-ide-versions`).
+
+## Task branches (this repo)
+
+When starting work on a **task** (labeled `tasks` on GitHub), prefer:
+
+```text
+feature/<issue-number>-<short-slug>
+```
+
+Examples: `feature/9-ide-versions`, `feature/13-documentation`
+
+Derive `<short-slug>` from the task title: lowercase, replace spaces with hyphens, strip bracket prefixes like `[Task 0.2]`, collapse multiple hyphens, keep it short (roughly 3–6 words max).
+
+## Related
+
+- Start workflow: [.cursor/skills/start-task/SKILL.md](../skills/start-task/SKILL.md)
+- PR creation: [.cursor/skills/create-or-update-pr/SKILL.md](../skills/create-or-update-pr/SKILL.md)

@@ -14,6 +14,19 @@ Run from the repo root: `npm run cli` or `bash scripts/cli.sh`. **`ci`:** `npm r
 
 - **CocoaPods:** **1.16.2** — [Gemfile](Gemfile) `gem "cocoapods"` must match **`COCOAPODS:`** in [ios/Podfile.lock](ios/Podfile.lock). **doctor** / **ci** fail if they differ, then verify **`bundle exec pod`** vs **Gemfile.lock**. **install** runs **`bundle install`**. **`npm run pod -- install`**: [scripts/pod.sh](scripts/pod.sh).
 
+### IDEs and native tooling (Expo SDK 55)
+
+Use these to edit the repo and run **native** iOS/Android dev builds (`expo run:ios` / `expo run:android`), not only Expo Go.
+
+| Tool | Minimum / recommendation | Setup |
+| --- | --- | --- |
+| **VS Code** | Current stable | [Visual Studio Code](https://code.visualstudio.com/Download) |
+| **Cursor** | Current stable (VS Code–compatible) | [Cursor](https://cursor.com) |
+| **Xcode** | Version required for **Expo SDK 55** native iOS builds (see [SDK 55 changelog](https://expo.dev/changelog/sdk-55)); on macOS run `npx expo-doctor` to validate | [Xcode (App Store)](https://apps.apple.com/app/xcode/id497799835) · Apple developer [Xcode releases](https://developer.apple.com/support/xcode/) |
+| **Android Studio** | Current stable with Android SDK + platform tools for RN 0.83 / Expo 55 | [Android Studio](https://developer.android.com/studio) · [SDK command-line tools](https://developer.android.com/studio#command-tools) |
+
+This app uses **Expo SDK ~55** ([`package.json`](package.json) `expo`). **iOS deployment target** in the native project is **15.1** ([`ios/`](ios/) `IPHONEOS_DEPLOYMENT_TARGET`). After Node/Ruby setup, install Xcode (macOS) and/or Android Studio, then from the repo root: `npm run ios` or `npm run android` (see [`package.json`](package.json) scripts). Debugging flows (breakpoints, attach) are covered in Story [#3](https://github.com/IsaacIsrael/the-project/issues/3).
+
 **Test that engine-strict is working (Node):** switch to a different Node (e.g. `nvm use 20`) and run `npm install` — it should fail with `EBADENGINE`. Then `nvm use` (or `nvm use 22.22.1`) and `npm install` should succeed.
 
 ## Project agent dependencies

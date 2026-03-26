@@ -5,5 +5,7 @@
 - **Agent context storage** (context the agent builds → `.cursor/context/`) → [.cursor/rules/agent-context.mdc](.cursor/rules/agent-context.mdc)
 - **Engine/version docs** (Node, Ruby, Expo, etc. → README Required versions) → [.cursor/rules/engine-versions-readme.mdc](.cursor/rules/engine-versions-readme.mdc)
 - **Tasks & GitHub** → [.cursor/rules/tasks-and-github.mdc](.cursor/rules/tasks-and-github.mdc)
+- **Branch names (Conventional Branch)** → [.cursor/rules/conventional-branch.mdc](.cursor/rules/conventional-branch.mdc)
+- **Start a task** (sync → list stories/tasks → branch → starter PR) → [.cursor/skills/start-task/SKILL.md](.cursor/skills/start-task/SKILL.md)
 - **Workflows & actions** (how to create; workflow/job/step names with emoji, job/workflow max 4 words) → [.cursor/rules/workflow-step-names.mdc](.cursor/rules/workflow-step-names.mdc)
 - **CLI tool lib** (adding a new check/ensure tool in `scripts/cli/lib/`) → [.cursor/rules/cli-lib-pattern.mdc](.cursor/rules/cli-lib-pattern.mdc)
